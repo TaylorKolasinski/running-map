@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var styles = [{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"off"}]},
+          {"featureType":"poi","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":0},{"lightness":-100},{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":0},{"lightness":100},{"visibility":"off"}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"transit","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":0},{"lightness":0},{"visibility":"off"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":0},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":26},{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":0},{"visibility":"off"}]}]
+      
+    
+
+      var map;
+      var activity_route;
+      // var activity_coordinates = $.getJSON('data.json', function() {
+      //     console.log('susuus')
+      // });
+
+      // var activity_coordinates = JSON.parse('data.json');
+      // console.log(typeof(activity_coordinates))
+      var globalX;
+      var activity_coordinates;
+      var myjson;
+      myjson = $.getJSON('data.txt', function(data) {
+          activity_coordinates = JSON.parse(JSON.stringify(data))
+          dataReady();
+      });
+        
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          styles: styles,
+          center: {lat: 40.730610, lng: -73.935242},
+          zoom: 12
+        });
+        console.log(typeof(activity_coordinates))
+        activity_route = new google.maps.Polyline({
+                        path: activity_coordinates,
+                        strokeColor: '#2c3e50',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 1.5
+                        });
+
+        activity_route.setMap(map);
+        
+      }
+
+      function dataReady() {
+        alert(activity_coordinates)
+        initMap()
+      }
+
+
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcupQ82Ibfv8WNLnbtinaEO50NLiZJdu4"
+    async defer></script>
+  </body>
+</html>
