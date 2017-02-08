@@ -16,7 +16,7 @@ def main():
             for point in segment.points:
                 lat = point.latitude
                 lng = point.longitude
-                t  = {'lat': str(lat), 'lng': str(lng)}
+                t  = {'lat': lat, 'lng': lng}
                 points.append(t)
 
 
