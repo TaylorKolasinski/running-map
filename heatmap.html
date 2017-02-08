@@ -3,6 +3,10 @@
   <head>
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
     <meta charset="utf-8">
     <style>
       /* Always set the map height explicitly to define the size of the div
@@ -21,33 +25,44 @@
   <body>
     <div id="map"></div>
     <script>
-      var styles = [{"featureType":"administrative","elementType":"all","stylers":[{"hue":"#000000"},{"lightness":-100},{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#dddddd"},{"saturation":-100},{"lightness":-3},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#000000"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"all","stylers":[{"hue":"#000000"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"transit","elementType":"labels","stylers":[{"hue":"#000000"},{"lightness":-100},{"visibility":"off"}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#dfeef0"},{"saturation":"-41"},{"lightness":"20"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#000000"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]}];
+      var styles = [{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"off"}]}, {"featureType":"poi","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":0},{"lightness":-100},{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":-100},{"visibility":"off"}]},{"featureType":"road.local","elementType":"all","stylers":[{"hue":"#ffffff"},{"saturation":0},{"lightness":100},{"visibility":"off"}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"transit","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":0},{"lightness":0},{"visibility":"off"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":0},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":26},{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":0},{"visibility":"off"}]}]
       
-      
 
+      var map, activity_route, globalX, activity_coordinates, myjson;
 
-      var map;
-
-      var activity_route = new google.maps.Polyline({{
-                        path: path,
-                        geodesic: true,
-                        strokeColor: '#FF0000',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                        }});
-
-
-      
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8,
-        styles: styles
+      myjson = $.getJSON('data_new.txt', function(data) {
+          activity_coordinates = JSON.parse(JSON.stringify(data))
+          dataReady();
       });
-      
+        
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          styles: styles,
+          center: {lat: 40.730610, lng: -73.935242},
+          zoom: 12
+        });
+        console.log(typeof(activity_coordinates))
+        
+        for (var i = 0; i < activity_coordinates.length -1; i++) {
+          console.log(activity_coordinates[i])
+          cords = activity_coordinates[i]
+          activity_route = new google.maps.Polyline({
+                          path: cords,
+                          strokeColor: '#2c3e50',
+                          strokeOpacity: 1.0,
+                          strokeWeight: 1.5,
+                          map: map
+                          });
+        }
+      }
 
+      function dataReady() {
+        alert(activity_coordinates)
+        initMap()
+      }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcupQ82Ibfv8WNLnbtinaEO50NLiZJdu4&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcupQ82Ibfv8WNLnbtinaEO50NLiZJdu4"
     async defer></script>
   </body>
 </html>
