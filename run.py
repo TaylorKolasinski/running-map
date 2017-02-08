@@ -2,33 +2,32 @@ import gpxpy
 import gpxpy.gpx
 import pandas as pd
 import json
-
+import os
 
 def main():
-    # loop through all the files here once
-    gpx_file = open('morning_run.gpx', 'r')
+    points = [] 
 
-    gpx = gpxpy.parse(gpx_file)
+    for filename in os.listdir('./activities/'):
+        if filename[-7:-4] == 'Run':
 
-    json_point = []
-    points = []
-    for track in gpx.tracks:
-        for segment in track.segments:
-            for point in segment.points:
-                latt = point.latitude
-                lngg = point.longitude
-                # t  = {'lat': latt, 'lng': lngg}
-                t = (latt, lngg)
-                points.append(t)
+            gpx_file = open('./activities/' + filename, 'r')
+            gpx = gpxpy.parse(gpx_file)
 
-    activity_data = pd.DataFrame(points, columns=['lat', 'lng'])
+            current_route = []
+           
+            for track in gpx.tracks:
+                for segment in track.segments:
+                    for point in segment.points:
+                        latt = point.latitude
+                        lngg = point.longitude
+                        t  = {'lat': latt, 'lng': lngg}
+                        current_route.append(t)
 
-    # activity_coordinates = ",\n".join(
-            # ["{{lat: {lat}, lng: {lon}}}".format(lat=x[0], lon=x[1]) for x in points])
-    
-    print(activity_data)
-    
-    activity_data.to_json('point_data.json')
+            points.append(current_route)
+
+
+    with open('data_new.txt', 'w') as outfile:
+        json.dump(points, outfile)
 
 if __name__ == '__main__':
     main()
